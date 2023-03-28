@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, Form
 from fastapi.templating import Jinja2Templates
 import sqlite3
 
-templates = Jinja2Templates(directory='simple-login-page/')
+templates = Jinja2Templates(directory='templates/')
 app = FastAPI()
 class Database:
     
