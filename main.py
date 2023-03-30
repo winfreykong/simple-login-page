@@ -11,10 +11,9 @@ async def read_form(request: Request):
 
 @app.post('/login')
 async def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    cursor = conn.cursor()
     try:
         async with conn: 
-            user = await cursor.fetchone(f"SELECT * FROM user WHERE username = '{username}' AND password = '{password}'")
+            user = await conn.fetchone(f"SELECT * FROM user WHERE username = '{username}' AND password = '{password}'")
             
         if user:
             return templates.TemplateResponse("success.html", {"request": request, "username": username})
@@ -25,10 +24,9 @@ async def login(request: Request, username: str = Form(...), password: str = For
 
 
 async def create_user(conn, user: str, pw: str): 
-    cursor = conn.cursor()
     query = """INSERT INTO user(username, password) VALUES (?, ?)"""
-    cursor.execute(query, (user, pw))
-    cursor.close()
+    async with conn:
+        conn.execute(query, (user, pw))
 
 async def create_test_users(conn):
     await create_user(conn, 'user1', 'testingtesttest')
