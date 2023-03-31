@@ -2,10 +2,20 @@ import sqlite3
 
 conn = sqlite3.connect('user.db')
 
-conn.execute('''CREATE TABLE user(
+cursor = conn.cursor()
+
+# Check if table exists
+cursor.execute(''' SELECT name FROM sqlite_master WHERE type='table' AND name='user' ''')
+
+if cursor.fetchone()[0]==1:
+    print('Table exists. Clearing table now..')
+    cursor.execute('DELETE FROM students;',)
+
+else:
+    conn.execute('''CREATE TABLE user(
                 username TEXT NOT NULL,
                 password TEXT NOT NULL,
                 PRIMARY KEY(username)
             );''')
-
+conn.commit()
 conn.close()

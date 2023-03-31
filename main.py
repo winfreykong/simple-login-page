@@ -33,7 +33,22 @@ async def login(request: Request, username: str = Form(...), password: str = For
             return templates.TemplateResponse("failure.html", {"request": request})
     except Exception:
         print(Exception)
-        return templates.TemplateResponse("error.html", {"request": request})   
+        return templates.TemplateResponse("error.html", {"request": request})  
+
+@app.on_event('startup')
+async def startup():
+    conn = sqlite3.connect("user.db")
+    cursor = conn.cursor()
+    testUser = 'user0'
+    testPassword = 'testingtesttest'
+    cursor.execute("SELECT * FROM user WHERE username = ? AND password = ?", (testUser, testPassword))
+    user = cursor.fetchone()
+    if user:
+        return
+    else:
+        cursor.execute("INSERT INTO user (username, password) VALUES (?, ?)", (testUser, testPassword))
+    conn.commit()
+    conn.close()
     
 @app.get("/register")
 async def register(request: Request):
@@ -42,8 +57,8 @@ async def register(request: Request):
 @app.post("/register")
 async def register(request: Request, username: str = Form(...), password: str = Form(...)):
     conn = sqlite3.connect("user.db")
-    c = conn.cursor()
-    c.execute("INSERT INTO user (username, password) VALUES (?, ?)", (username, password))
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO user (username, password) VALUES (?, ?)", (username, password))
     conn.commit()
     conn.close()
 
