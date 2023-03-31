@@ -10,7 +10,7 @@ cursor.execute(''' SELECT name FROM sqlite_master WHERE type='table' AND name='u
 # Clear table if exists
 if cursor.fetchone()[0]==1:
     print('Table exists. Clearing table now..')
-    cursor.execute('DELETE FROM students;',)
+    cursor.execute('DELETE FROM user;',)
 
 # Create table if does not exist
 else:
