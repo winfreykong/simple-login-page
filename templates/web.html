@@ -1,6 +1,6 @@
 <html>
   <head>
-    <link rel="stylesheet" href="./styles.css">
+    <link href="{{ url_for('static', path='/css/styles.css') }}" rel="stylesheet">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Login Page</title>
@@ -16,7 +16,8 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" />
       </div>
-      <button id="button" type="submit">Login</button>
+      <button id="submit" type="submit">Login</button>
     </form>
+    <a href="/register">Create new account</a>
   </body>
 </html>
